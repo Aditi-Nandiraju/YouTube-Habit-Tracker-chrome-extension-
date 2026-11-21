@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="color-scheme" content="light dark">
+  <title>YouTube Habit Tracker — Settings</title>
+  <style>
+    :root {
+      --bg: #f4f5f9; --card: #fff; --text: #1b2130; --muted: #6a7284; --line: #e3e6ee;
+      --study: #4f7cff; --fun: #ff7a59; --idle: #9aa4b2; --bad: #e0483e; --radius: 14px;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root { --bg: #0f1218; --card: #181c25; --text: #e7eaf1; --muted: #9199aa; --line: #2a303c; }
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--bg); color: var(--text); font: 14px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+    .wrap { max-width: 860px; margin: 0 auto; padding: 28px 20px 80px; }
+    h1 { font-size: 22px; margin: 0 0 4px; letter-spacing: -.01em; }
+    .lead { color: var(--muted); margin: 0 0 22px; }
+    section { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 14px; }
+    h2 { font-size: 15px; margin: 0 0 4px; }
+    .hint { color: var(--muted); font-size: 12.5px; margin: 0 0 12px; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    @media (max-width: 680px) { .grid2 { grid-template-columns: 1fr; } }
+    label.field { display: block; font-weight: 600; font-size: 13px; margin-bottom: 4px; }
+    label.field span { font-weight: 400; color: var(--muted); }
+    textarea, input[type="number"], input[type="text"], select {
+      width: 100%; font: 13px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      color: var(--text); background: var(--bg); border: 1px solid var(--line); border-radius: 9px; padding: 8px 10px;
+    }
+    input[type="text"], select { font-family: inherit; }
+    textarea { min-height: 150px; resize: vertical; }
+    textarea.study { border-left: 3px solid var(--study); }
+    textarea.fun { border-left: 3px solid var(--fun); }
+    .row { display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end; margin-bottom: 12px; }
+    .row > div { flex: 1; min-width: 180px; }
+    .check { display: flex; gap: 10px; align-items: flex-start; margin: 10px 0; }
+    .check input { margin-top: 4px; }
+    .check small { display: block; color: var(--muted); }
+    .builtin { font-size: 12px; color: var(--muted); margin-top: 6px; }
+    .builtin b { color: var(--text); font-weight: 600; }
+    .btn { font: inherit; font-weight: 600; font-size: 13px; border: 1px solid var(--line); background: var(--card); color: var(--text); padding: 8px 14px; border-radius: 9px; cursor: pointer; }
+    .btn.primary { background: var(--study); border-color: var(--study); color: #fff; }
+    .btn.danger { color: var(--bad); border-color: color-mix(in srgb, var(--bad) 45%, var(--line)); }
+    .actions { position: sticky; bottom: 0; display: flex; gap: 10px; align-items: center; padding: 14px 0; background: linear-gradient(transparent, var(--bg) 35%); }
+    #toast { color: var(--muted); font-size: 13px; }
+    .ov { display: grid; gap: 6px; }
+    .ov-row { display: flex; gap: 10px; align-items: center; justify-content: space-between; padding: 6px 0; border-top: 1px solid var(--line); font-size: 13px; }
+    .ov-row:first-child { border-top: 0; }
+    .ov-row code { font-size: 12px; }
+    .chip { font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; padding: 2px 7px; border-radius: 5px; color: var(--c); background: color-mix(in srgb, var(--c) 14%, transparent); }
+    .result { margin-top: 10px; padding: 10px 12px; border-radius: 9px; background: var(--bg); font-size: 13px; min-height: 40px; }
+    .muted { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>YouTube Habit Tracker — Settings</h1>
+    <p class="lead">Tune how videos are classified and what counts as idle. Changes apply to tracking from the moment you save; past time is not re-labelled.</p>
+
+    <section>
+      <h2>Keywords</h2>
+      <p class="hint">Comma- or line-separated. Matched as whole words in the title (×2), channel name (×2) and tags (×1); simple plurals and “-ing” forms match too. YouTube’s own category adds its weight below.</p>
+      <div class="grid2">
+        <div>
+          <label class="field" for="studyKeywords">Study keywords</label>
+          <textarea id="studyKeywords" class="study" spellcheck="false"></textarea>
+        </div>
+        <div>
+          <label class="field" for="funKeywords">Fun keywords</label>
+          <textarea id="funKeywords" class="fun" spellcheck="false"></textarea>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Always-Study / Always-Fun channels</h2>
+      <p class="hint">One per line. Use the channel’s display name (e.g. <code>Khan Academy</code>) or its @handle (e.g. <code>@khanacademy</code>). These are added to the built-in lists in <code>config.js</code>. If a channel is in both, Study wins.</p>
+      <div class="grid2">
+        <div>
+          <label class="field" for="alwaysStudyChannels">Always Study</label>
+          <textarea id="alwaysStudyChannels" class="study" spellcheck="false" style="min-height:110px"></textarea>
+          <div class="builtin" id="builtinStudy"></div>
+        </div>
+        <div>
+          <label class="field" for="alwaysFunChannels">Always Fun</label>
+          <textarea id="alwaysFunChannels" class="fun" spellcheck="false" style="min-height:110px"></textarea>
+          <div class="builtin" id="builtinFun"></div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>YouTube category weights</h2>
+      <p class="hint">One <code>Category = weight</code> per line. Positive leans Study, negative leans Fun. Category names are YouTube’s English names.</p>
+      <textarea id="categoryWeights" spellcheck="false" style="min-height:200px"></textarea>
+      <div class="row" style="margin-top:12px">
+        <div>
+          <label class="field" for="tieBreaker">When there’s no clear signal, count as</label>
+          <select id="tieBreaker">
+            <option value="fun">Fun</option>
+            <option value="study">Study</option>
+          </select>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>Idle detection</h2>
+      <p class="hint">Chrome reports the computer as idle after this many seconds with no keyboard or mouse input (minimum 15). A locked screen is always Idle.</p>
+      <div class="row">
+        <div>
+          <label class="field" for="idleThresholdSec">Idle after <span>(seconds)</span></label>
+          <input type="number" id="idleThresholdSec" min="15" max="3600" step="1">
+        </div>
+        <div>
+          <label class="field" for="idleHandling">While a video is playing and you stop touching the computer</label>
+          <select id="idleHandling">
+            <option value="strict">Strict — switch to Idle immediately</option>
+            <option value="smart">Smart — keep counting the video for a while</option>
+          </select>
+        </div>
+        <div>
+          <label class="field" for="passiveGraceMin">Smart mode: keep counting for <span>(minutes)</span></label>
+          <input type="number" id="passiveGraceMin" min="1" max="600" step="1">
+        </div>
+      </div>
+      <label class="check"><input type="checkbox" id="retroactiveIdle">
+        <span>Back-date idle (strict mode)<small>When idle is detected, also move the preceding “Idle after” seconds from Study/Fun into Idle — that’s when you actually stopped.</small></span></label>
+      <label class="check"><input type="checkbox" id="unfocusedIsIdle">
+        <span>Count “YouTube visible but another window focused” as Idle<small>Turn off if you often watch on a second monitor while working elsewhere.</small></span></label>
+    </section>
+
+    <section>
+      <h2>Test the classifier</h2>
+      <p class="hint">Uses the values currently in this form (saved or not).</p>
+      <div class="row">
+        <div style="flex:2"><label class="field" for="tTitle">Video title</label><input type="text" id="tTitle" placeholder="Python Full Course for Beginners"></div>
+        <div><label class="field" for="tChannel">Channel</label><input type="text" id="tChannel" placeholder="Programming with Mosh"></div>
+      </div>
+      <div class="row">
+        <div><label class="field" for="tCategory">Category</label><input type="text" id="tCategory" placeholder="Education"></div>
+        <div style="flex:2"><label class="field" for="tTags">Tags <span>(comma-separated)</span></label><input type="text" id="tTags" placeholder="python, programming"></div>
+      </div>
+      <button class="btn" id="testBtn">Classify</button>
+      <div class="result" id="testResult"><span class="muted">Result appears here.</span></div>
+    </section>
+
+    <section>
+      <h2>Per-video overrides</h2>
+      <p class="hint">Set from the popup with “Video is Study / Fun”.</p>
+      <div class="ov" id="overrides"></div>
+    </section>
+
+    <section>
+      <h2>Data</h2>
+      <div class="row">
+        <div>
+          <label class="field" for="retentionDays">Keep history for <span>(days)</span></label>
+          <input type="number" id="retentionDays" min="7" max="3650" step="1">
+        </div>
+      </div>
+      <div class="row" style="margin:0">
+        <button class="btn" id="exportBtn">Export all data (JSON)</button>
+        <button class="btn danger" id="clearBtn">Delete all tracked history</button>
+      </div>
+    </section>
+
+    <div class="actions">
+      <button class="btn primary" id="saveBtn">Save settings</button>
+      <button class="btn" id="resetBtn">Reset form to defaults</button>
+      <span id="toast"></span>
+    </div>
+  </div>
+
+  <script type="module" src="options.js"></script>
+</body>
+</html>
