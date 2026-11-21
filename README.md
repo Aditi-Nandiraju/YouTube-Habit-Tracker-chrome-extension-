@@ -3,7 +3,7 @@
 A Chrome extension (Manifest V3) that tracks how your YouTube time splits into **Study**, **Fun**, and **Idle**. It logs the exact time each session starts and stops and shows where you spent more or less time. It never blocks, hides, or changes anything on YouTube.
 
 <p align="center">
-  <img src="docs/popup.png" alt="Popup showing today's Study / Fun / Idle breakdown, insights and timeline" width="360">
+  <img src="popup.png" alt="Popup showing today's Study / Fun / Idle breakdown, insights and timeline" width="360">
 </p>
 
 <sub>Screenshot rendered from simulated data.</sub>
